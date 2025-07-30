@@ -1,0 +1,44 @@
+{
+  "name": "safestart_backend",
+  "version": "1.0.0",
+  "description": "Prestart Vehicle-Inspection Platform Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kojtet/safestart_backend.git"
+  },
+  "keywords": ["vehicle", "inspection", "safety", "prestart"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kojtet/safestart_backend/issues"
+  },
+  "homepage": "https://github.com/kojtet/safestart_backend#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "pg": "^8.16.3",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "multer": "^1.4.5-lts.1",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "node-cron": "^3.0.3",
+    "csv-writer": "^1.6.0",
+    "pdfkit": "^0.14.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
