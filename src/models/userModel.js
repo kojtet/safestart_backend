@@ -40,6 +40,16 @@ async function findByResetToken(token) {
   return data;
 }
 
+async function findByRole(role) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('role', role)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 // ───────── WRITE ─────────
 async function createUser(user) {
   const { data, error } = await supabase
@@ -90,6 +100,7 @@ module.exports = {
   findById, 
   listByCompany, 
   findByResetToken,
+  findByRole,
   createUser, 
   updateUser,
   updateResetToken,

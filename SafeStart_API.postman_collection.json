@@ -1,0 +1,763 @@
+{
+  "info": {
+    "name": "SafeStart API",
+    "description": "Complete API collection for SafeStart Vehicle Inspection Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Bootstrap Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"SafeStart Company\",\n  \"company_address\": \"123 Safety Street, City, State 12345\",\n  \"company_phone\": \"+1234567890\",\n  \"company_email\": \"info@safestart.com\",\n  \"admin_full_name\": \"Admin User\",\n  \"admin_email\": \"admin@safestart.com\",\n  \"admin_password\": \"admin123456\",\n  \"admin_phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/bootstrap-admin",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "bootstrap-admin"]
+            },
+            "description": "Create the initial admin user and company. This can only be done once."
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_id\": \"{{company_id}}\",\n  \"full_name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"driver\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user (requires admin token)"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@safestart.com\",\n  \"password\": \"admin123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with email and password"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Refresh access token using refresh token"
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgot-password"]
+            },
+            "description": "Request password reset email"
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"reset_token_from_email\",\n  \"password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/reset-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "reset-password"]
+            },
+            "description": "Reset password using token from email"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": ["{{base_url}}"],
+              "path": ["users", "me"]
+            },
+            "description": "Get current user profile"
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            },
+            "description": "List all users in the company"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "Create Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Truck 001\",\n  \"type\": \"truck\",\n  \"make\": \"Ford\",\n  \"model\": \"F-150\",\n  \"year\": 2020,\n  \"license_plate\": \"ABC123\",\n  \"vin\": \"1HGBH41JXMN109186\",\n  \"color\": \"White\",\n  \"fuel_type\": \"gasoline\",\n  \"mileage\": 50000,\n  \"status\": \"active\",\n  \"description\": \"Company delivery truck\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vehicles",
+              "host": ["{{base_url}}"],
+              "path": ["vehicles"]
+            },
+            "description": "Create a new vehicle"
+          }
+        },
+        {
+          "name": "List Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/vehicles",
+              "host": ["{{base_url}}"],
+              "path": ["vehicles"]
+            },
+            "description": "List all vehicles"
+          }
+        },
+        {
+          "name": "Get Vehicle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/vehicles/{{vehicle_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["vehicles", "{{vehicle_id}}"]
+            },
+            "description": "Get vehicle by ID"
+          }
+        },
+        {
+          "name": "Update Vehicle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Truck 001\",\n  \"mileage\": 55000,\n  \"status\": \"maintenance\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vehicles/{{vehicle_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["vehicles", "{{vehicle_id}}"]
+            },
+            "description": "Update vehicle information"
+          }
+        },
+        {
+          "name": "Delete Vehicle",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/vehicles/{{vehicle_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["vehicles", "{{vehicle_id}}"]
+            },
+            "description": "Delete a vehicle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inspections",
+      "item": [
+        {
+          "name": "Create Inspection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_id\": \"{{vehicle_id}}\",\n  \"type\": \"prestart\",\n  \"inspector_id\": \"{{user_id}}\",\n  \"scheduled_date\": \"2024-01-15T08:00:00Z\",\n  \"due_date\": \"2024-01-15T17:00:00Z\",\n  \"status\": \"scheduled\",\n  \"description\": \"Daily prestart inspection\",\n  \"template_id\": \"{{template_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/inspections",
+              "host": ["{{base_url}}"],
+              "path": ["inspections"]
+            },
+            "description": "Create a new inspection"
+          }
+        },
+        {
+          "name": "List Inspections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/inspections",
+              "host": ["{{base_url}}"],
+              "path": ["inspections"]
+            },
+            "description": "List all inspections"
+          }
+        },
+        {
+          "name": "Get Inspection Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/inspections/stats",
+              "host": ["{{base_url}}"],
+              "path": ["inspections", "stats"]
+            },
+            "description": "Get inspection statistics"
+          }
+        },
+        {
+          "name": "Export Inspections CSV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/inspections/export/csv",
+              "host": ["{{base_url}}"],
+              "path": ["inspections", "export", "csv"]
+            },
+            "description": "Export inspections to CSV"
+          }
+        },
+        {
+          "name": "Get Inspection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/inspections/{{inspection_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["inspections", "{{inspection_id}}"]
+            },
+            "description": "Get inspection by ID"
+          }
+        },
+        {
+          "name": "Update Inspection",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"completed_date\": \"2024-01-15T10:30:00Z\",\n  \"notes\": \"All items passed inspection\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/inspections/{{inspection_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["inspections", "{{inspection_id}}"]
+            },
+            "description": "Update inspection details"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Issues",
+      "item": [
+        {
+          "name": "Create Issue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_id\": \"{{vehicle_id}}\",\n  \"title\": \"Brake Issue\",\n  \"description\": \"Brake pedal feels soft and requires more pressure\",\n  \"priority\": \"high\",\n  \"category\": \"safety\",\n  \"reported_by\": \"{{user_id}}\",\n  \"location\": \"Front brakes\",\n  \"status\": \"open\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/issues",
+              "host": ["{{base_url}}"],
+              "path": ["issues"]
+            },
+            "description": "Create a new issue"
+          }
+        },
+        {
+          "name": "List Issues",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/issues",
+              "host": ["{{base_url}}"],
+              "path": ["issues"]
+            },
+            "description": "List all issues"
+          }
+        },
+        {
+          "name": "Get Issue Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/issues/stats",
+              "host": ["{{base_url}}"],
+              "path": ["issues", "stats"]
+            },
+            "description": "Get issue statistics"
+          }
+        },
+        {
+          "name": "Get Issue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/issues/{{issue_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["issues", "{{issue_id}}"]
+            },
+            "description": "Get issue by ID"
+          }
+        },
+        {
+          "name": "Update Issue",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"assigned_to\": \"{{user_id}}\",\n  \"notes\": \"Mechanic assigned to investigate\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/issues/{{issue_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["issues", "{{issue_id}}"]
+            },
+            "description": "Update issue details"
+          }
+        },
+        {
+          "name": "Resolve Issue",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolution_notes\": \"Brake fluid topped up, brakes now working properly\",\n  \"resolved_by\": \"{{user_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/issues/{{issue_id}}/resolve",
+              "host": ["{{base_url}}"],
+              "path": ["issues", "{{issue_id}}", "resolve"]
+            },
+            "description": "Mark issue as resolved"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Templates",
+      "item": [
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Daily Prestart Checklist\",\n  \"description\": \"Standard daily prestart inspection checklist\",\n  \"type\": \"prestart\",\n  \"category\": \"safety\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates",
+              "host": ["{{base_url}}"],
+              "path": ["templates"]
+            },
+            "description": "Create a new inspection template"
+          }
+        },
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates",
+              "host": ["{{base_url}}"],
+              "path": ["templates"]
+            },
+            "description": "List all templates"
+          }
+        },
+        {
+          "name": "Get Template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}"]
+            },
+            "description": "Get template by ID"
+          }
+        },
+        {
+          "name": "Update Template",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Daily Prestart Checklist\",\n  \"description\": \"Updated daily prestart inspection checklist\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}"]
+            },
+            "description": "Update template details"
+          }
+        },
+        {
+          "name": "Delete Template",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}"]
+            },
+            "description": "Delete a template"
+          }
+        },
+        {
+          "name": "Create Template Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Are all lights working properly?\",\n  \"type\": \"boolean\",\n  \"required\": true,\n  \"order\": 1,\n  \"category\": \"lights\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}/items",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}", "items"]
+            },
+            "description": "Add an item to a template"
+          }
+        },
+        {
+          "name": "Update Template Item",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Updated question text\",\n  \"required\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}/items/{{item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}", "items", "{{item_id}}"]
+            },
+            "description": "Update a template item"
+          }
+        },
+        {
+          "name": "Delete Template Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}/items/{{item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}", "items", "{{item_id}}"]
+            },
+            "description": "Delete a template item"
+          }
+        },
+        {
+          "name": "Reorder Template Items",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"item_orders\": [\n    {\"item_id\": \"{{item_id_1}}\", \"order\": 1},\n    {\"item_id\": \"{{item_id_2}}\", \"order\": 2}\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}/items/reorder",
+              "host": ["{{base_url}}"],
+              "path": ["templates", "{{template_id}}", "items", "reorder"]
+            },
+            "description": "Reorder template items"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Get Company",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/companies/{{company_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["companies", "{{company_id}}"]
+            },
+            "description": "Get company details"
+          }
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Company Name\",\n  \"address\": \"456 New Address, City, State 54321\",\n  \"phone\": \"+1987654321\",\n  \"email\": \"updated@company.com\",\n  \"website\": \"https://updatedcompany.com\",\n  \"industry\": \"Transportation\",\n  \"size\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/companies/{{company_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["companies", "{{company_id}}"]
+            },
+            "description": "Update company information"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["notifications"]
+            },
+            "description": "List all notifications for current user"
+          }
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/unread-count",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "unread-count"]
+            },
+            "description": "Get count of unread notifications"
+          }
+        },
+        {
+          "name": "Mark as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "{{notification_id}}", "read"]
+            },
+            "description": "Mark a notification as read"
+          }
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/mark-all-read",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "mark-all-read"]
+            },
+            "description": "Mark all notifications as read"
+          }
+        }
+      ]
+    }
+  ]
+} 

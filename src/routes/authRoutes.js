@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 
+// POST /api/v1/auth/bootstrap-admin
+router.post('/bootstrap-admin', 
+  authController.bootstrapAdminValidation,
+  authController.bootstrapAdmin
+);
+
 // POST /api/v1/auth/register
 router.post('/register', 
   authController.registerValidation,
